@@ -1,0 +1,29 @@
+{
+  "user": "Username",
+  "openWeatherApiKey": "KEY HERE",
+  "networkInterface": "wlx5ca6e653ffc3",
+  "wlStops": [
+    {
+      "stopId": 399,
+      "diva": "60200267",
+      "lines": [
+        "18",
+        "WLB"
+      ]
+    },
+    {
+      "stopId": 411,
+      "diva": "60201598",
+      "lines": [
+        "N6"
+      ]
+    },
+    {
+      "stopId": 5666,
+      "diva": "60200027",
+      "lines": [
+        "N8"
+      ]
+    }
+  ]
+}

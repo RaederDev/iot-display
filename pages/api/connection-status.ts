@@ -1,0 +1,38 @@
+import type {NextApiRequest, NextApiResponse} from 'next';
+// @ts-ignore
+import * as network from 'network';
+import {ConfigKey, getConfigValue} from '../../lib/config';
+
+export interface ConnectionStatusResponse {
+    ip?: string;
+    error?: string;
+}
+
+const getIpForConfiguredInterface = (): Promise<string> => {
+    const configuredInterface: string = getConfigValue(ConfigKey.NETWORK_INTERFACE);
+    return new Promise((resolve, reject) => {
+        network.get_interfaces_list((err: any, list: any) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            const found = list.find((iface: any) => configuredInterface === iface.name);
+            if (!found) {
+                reject('Interface not found');
+                return;
+            }
+
+            resolve(found.ip_address);
+        });
+    });
+};
+
+export default async function getConnectionStatus(req: NextApiRequest, res: NextApiResponse<ConnectionStatusResponse>) {
+    try {
+        const ip = await getIpForConfiguredInterface();
+        return res.status(200).json({ip});
+    } catch (e) {
+        return res.status(500).json({error: 'Interface not found'});
+    }
+}
