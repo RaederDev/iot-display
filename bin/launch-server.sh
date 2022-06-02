@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-npm run build
+echo "Starting server"
 npm run start
