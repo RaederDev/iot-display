@@ -1,7 +1,7 @@
 {
   "user": "Username",
-  "openWeatherApiKey": "KEY HERE",
-  "networkInterface": "wlx5ca6e653ffc3",
+  "openWeatherApiKey": "",
+  "networkInterface": "",
   "wlStops": [
     {
       "stopId": 399,

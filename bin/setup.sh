@@ -16,13 +16,14 @@ if ! command -v node >/dev/null 2>&1; then
 fi
 
 if ! id -u "display" >/dev/null 2>&1; then
-  echo useradd -m display
+  useradd -m display
 fi
 
 mkdir /opt/iot-display
 chown display:display /opt/iot-display
 sudo -u display git clone https://github.com/RaederDev/iot-display.git /opt/iot-display
-sudo -u display /opt/iot-display/bin/update-server.sh
+sudo -u display sh -c "cd /opt/iot-display && /opt/iot-display/bin/update-server.sh"
+sudo -u display cp /opt/iot-display/config.tpl.json /opt/iot-display/config.json
 ln -s /opt/iot-display/bin/system/iot-display.service /lib/systemd/system/iot-display.service
 
 systemctl daemon-reload

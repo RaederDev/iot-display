@@ -35,6 +35,11 @@ export interface WeatherResponse {
 }
 
 export default async function getWeather(req: NextApiRequest, res: NextApiResponse<WeatherResponse>) {
+    const key = getConfigValue(ConfigKey.OPEN_WEATHER_API_KEY);
+    if (!key) {
+        throw new Error('missing api key');
+    }
+
     const weather = await new AsyncWeather();
     weather.setLang('en');
     weather.setZipCodeAndCountryCode(1050, 'AT');
