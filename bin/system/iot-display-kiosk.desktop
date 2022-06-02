@@ -1,0 +1,6 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Exec=/opt/iot-display/bin/launch-browser.js
+Name=IOT-Display-Kiosk
