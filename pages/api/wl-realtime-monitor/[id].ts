@@ -78,6 +78,7 @@ export default async function getMonitor(req: NextApiRequest, res: NextApiRespon
         }
         return res.status(200).json({data: result});
     } catch (e) {
+        console.error(e);
         return res.status(500).json({error: 'internal error'});
     }
 }
