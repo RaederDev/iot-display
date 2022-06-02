@@ -26,5 +26,6 @@ sudo -u display /opt/iot-display/bin/update-server.sh
 ln -s /opt/iot-display/bin/system/iot-display.service /lib/systemd/system/iot-display.service
 
 systemctl daemon-reload
-systemctl enable iot-display
-systemctl start iot-display
+
+echo Please add valid configuration file to /opt/iot-display/config, afterwards start the server with
+echo "systemctl enable iot-display && systemctl start iot-display"
