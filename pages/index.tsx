@@ -2,7 +2,7 @@ import type {NextPage} from 'next'
 import Layout from '../components/layout';
 import Greeting from '../components/applets/greeting';
 import Weather from '../components/applets/weather';
-import Departures from '../components/applets/departures';
+import Departures from '../components/applets/departures/departures';
 import BigClock from '../components/applets/big-clock';
 
 const Home: NextPage = () => {

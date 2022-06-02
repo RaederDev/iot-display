@@ -4,6 +4,7 @@ import {WeatherResponse} from '../../pages/api/weather';
 import Card from '../card';
 import {IoArrowUp} from '@react-icons/all-files/io5/IoArrowUp';
 import {IoArrowDown} from '@react-icons/all-files/io5/IoArrowDown';
+import Image from 'next/image';
 
 export default function Weather() {
     const [weatherData, setWeatherData] = useState<WeatherResponse>();
@@ -54,7 +55,9 @@ export default function Weather() {
                         <IoArrowDown/>
                     </div>
                 </div>
-                <div><img src={weatherData.weather[0].icon} alt="icon"/></div>
+                <div>
+                    <Image height={100} width={100} src={weatherData.weather[0].icon} alt="icon"/>
+                </div>
             </div>
         </Card>
     );
