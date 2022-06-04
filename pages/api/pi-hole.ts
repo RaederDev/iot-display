@@ -1,5 +1,6 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {ApiResponse} from '../../lib/response';
+import {ConfigKey, getConfigValue} from '../../lib/config';
 
 export interface PiHoleResponse {
     ads_blocked_today: number;
@@ -8,7 +9,7 @@ export interface PiHoleResponse {
     unique_domains: number;
 }
 
-const API_URL = 'http://pi.hole/admin/api.php';
+const API_URL = `http://${getConfigValue(ConfigKey.PI_HOLE_HOST)}/admin/api.php`;
 
 export default async function getStats(req: NextApiRequest, res: NextApiResponse<ApiResponse<PiHoleResponse>>) {
     try {

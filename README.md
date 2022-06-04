@@ -1,41 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped
-with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Raspberry Pi dashboard
 
-## Getting Started
+## Setup server
 
-First, run the development server:
+Make sure you have git, nodejs and systemd installed before starting the setup process.  
+Download and execute the setup script. This will create a new user, clone the project,
+build the server and install a systemd startup task to launch the server on boot.
 
 ```bash
-npm run dev
-# or
-yarn dev
+wget https://raw.githubusercontent.com/RaederDev/iot-display/main/bin/setup.sh && chmod +x setup.sh
+sudo ./setup.sh
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+After setup was completed you need to edit the config file to add your own API keys and other config:
+```bash
+vi /opt/iot-display/config/config.json
+```
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+Aftwards enable and start the server:
+```bash
+systemctl enable iot-display && systemctl start iot-display
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed
-on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited
-in `pages/api/hello.ts`.
+## Setup client
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated
-as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+The project contains a desktop file and script to launch chromium in kiosk mode.
+Starting this script on boot is dependent on what DE you use so please refer to their documentation for that.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+You can find the script and setup process in your installation path:
+```bash
+/opt/iot-display/bin/launch-browser.js
+/opt/iot-display/bin/system/iot-display-kiosk.desktop
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions
-are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use
-the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
-from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Finding stop and diva IDs
+You can use this tool (not affiliated with the project), to easily find WL stop and diva IDs for your config file:
+  
+https://till.mabe.at/rbl/

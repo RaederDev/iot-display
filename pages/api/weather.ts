@@ -1,7 +1,7 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 // @ts-ignore
 import {AsyncWeather} from '@cicciosgamino/openweather-apis';
-import {ConfigKey, getConfigValue} from '../../lib/config';
+import {ConfigKey, getConfigValue, OpenWeatherConfig} from '../../lib/config';
 
 type WeatherConditionMain = 'Thunderstorm' | 'Drizzle' | 'Rain'
     | 'Snow' | 'Atmosphere' | 'Clear' | 'Clouds';
@@ -35,16 +35,16 @@ export interface WeatherResponse {
 }
 
 export default async function getWeather(req: NextApiRequest, res: NextApiResponse<WeatherResponse>) {
-    const key = getConfigValue(ConfigKey.OPEN_WEATHER_API_KEY);
-    if (!key) {
+    const weatherConfig: OpenWeatherConfig = getConfigValue(ConfigKey.OPEN_WEATHER);
+    if (!weatherConfig.apiKey) {
         throw new Error('missing api key');
     }
 
     const weather = await new AsyncWeather();
     weather.setLang('en');
-    weather.setZipCodeAndCountryCode(1050, 'AT');
-    weather.setUnits('metric');
-    weather.setApiKey(getConfigValue(ConfigKey.OPEN_WEATHER_API_KEY));
+    weather.setZipCodeAndCountryCode(weatherConfig.zipCode, weatherConfig.country);
+    weather.setUnits(weatherConfig.unit);
+    weather.setApiKey(weatherConfig.apiKey);
 
     try {
         const resp: WeatherResponse = await weather.getAllWeather();
