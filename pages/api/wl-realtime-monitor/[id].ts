@@ -71,7 +71,7 @@ export default async function getMonitor(req: NextApiRequest, res: NextApiRespon
             .map(id => `stopId=${id}`)
             .join('&');
         const reqUrl = `${API_BASE_URL}monitor?${query}`;
-        const result: MonitorResponse = await (await fetch(reqUrl)).json();
+        const result: MonitorResponse = await (await fetch(reqUrl)).json() as MonitorResponse;
         if (result?.message?.value !== 'OK') {
             console.error(result);
             return res.status(500).json({error: 'internal error'});

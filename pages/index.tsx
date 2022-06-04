@@ -4,6 +4,7 @@ import Greeting from '../components/applets/greeting';
 import Weather from '../components/applets/weather';
 import Departures from '../components/applets/departures/departures';
 import BigClock from '../components/applets/big-clock';
+import PiHole from '../components/applets/pi-hole';
 
 const Home: NextPage = () => {
     return (
@@ -12,7 +13,7 @@ const Home: NextPage = () => {
             <div className="grid grid-cols-12">
                 <div className="col-span-5">
                     <Weather />
-                    <div className="mt-5"><BigClock /></div>
+                    <div className="mt-5"><PiHole /></div>
                 </div>
                 <div className="col-span-7 pl-8">
                     <Departures />
