@@ -5,7 +5,7 @@ After=graphical.target
 
 [Service]
 Type=simple
-User=root
+User=%I
 ExecStart=/opt/iot-display/bin/launch-human-monitoring.sh
 WorkingDirectory=/opt/iot-display/
 Restart=no

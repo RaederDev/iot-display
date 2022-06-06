@@ -17,7 +17,6 @@ fi
 
 if ! id -u "display" >/dev/null 2>&1; then
   useradd -m display
-  usermod -a -G i2c display
 fi
 
 mkdir /opt/iot-display
