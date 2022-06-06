@@ -21,7 +21,7 @@ async function detectHumans() {
     if (humanPresent) {
         dpmsOn = true;
         setTimeout(() => dpmsOn = false, 1000 * 60 * 5);
-        exec('dpms force on', (error: any, _: any, stderr: any) => {
+        exec('xset dpms force on', (error: any, _: any, stderr: any) => {
             if (error || stderr) {
                 console.error(error, stderr);
             }
