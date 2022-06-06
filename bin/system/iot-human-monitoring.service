@@ -9,6 +9,7 @@ User=display
 ExecStart=/opt/iot-display/bin/launch-human-monitoring.sh
 WorkingDirectory=/opt/iot-display/
 Restart=no
+Environment=DISPLAY=:0
 
 [Install]
 WantedBy=multi-user.target
