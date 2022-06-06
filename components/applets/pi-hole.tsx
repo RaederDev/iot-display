@@ -1,11 +1,10 @@
 import {useEffect, useState} from 'react';
 import Card from '../card';
 import {PiHoleResponse} from '../../pages/api/pi-hole';
-import {ApiResponse} from '../../lib/response';
 import Image from 'next/image';
 
 export default function PiHole() {
-    const [response, setResponse] = useState<ApiResponse<PiHoleResponse>>();
+    const [response, setResponse] = useState<PiHoleResponse>();
 
     useEffect(() => {
         const update = () => fetch('api/pi-hole')

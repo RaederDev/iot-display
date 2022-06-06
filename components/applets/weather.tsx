@@ -37,28 +37,30 @@ export default function Weather() {
     }
 
     return (
+        weatherData?.data ?
         <Card>
             <div className="flex justify-between items-center">
                 <div>
-                    <div className="text-3xl">{weatherData.name}</div>
-                    <div className="text-4xl">{Math.round(weatherData.main.temp)}°C</div>
+                    <div className="text-3xl">{weatherData.data.name}</div>
+                    <div className="text-4xl">{Math.round(weatherData.data.main.temp)}°C</div>
                     <div>
-                        {weatherData.weather[0].description}.
-                        feels like {Math.round(weatherData.main.feels_like)}°C
+                        {weatherData.data.weather[0].description}.
+                        feels like {Math.round(weatherData.data.main.feels_like)}°C
                     </div>
                     <div className="flex items-center">
-                        high. {Math.round(weatherData.main.temp_max)}°C
+                        high. {Math.round(weatherData.data.main.temp_max)}°C
                         <IoArrowUp/>
                     </div>
                     <div className="flex items-center">
-                        low. {Math.round(weatherData.main.temp_min)}°C
+                        low. {Math.round(weatherData.data.main.temp_min)}°C
                         <IoArrowDown/>
                     </div>
                 </div>
                 <div>
-                    <Image height={100} width={100} src={weatherData.weather[0].icon} alt="icon"/>
+                    <Image height={100} width={100} src={weatherData.data.weather[0].icon} alt="icon"/>
                 </div>
             </div>
-        </Card>
+        </Card>:
+        <Card><span>Loading...</span></Card>
     );
 }

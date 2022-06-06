@@ -1,0 +1,14 @@
+[Unit]
+Description=iot-display
+Documentation=https://github.com/RaederDev/iot-display
+After=network.target
+
+[Service]
+Type=simple
+User=display
+ExecStart=/opt/iot-display/bin/launch-human-monitoring.sh
+WorkingDirectory=/opt/iot-display/
+Restart=no
+
+[Install]
+WantedBy=multi-user.target

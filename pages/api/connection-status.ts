@@ -2,10 +2,14 @@ import type {NextApiRequest, NextApiResponse} from 'next';
 // @ts-ignore
 import * as network from 'network';
 import {ConfigKey, getConfigValue} from '../../lib/config';
+import {ApiResponse} from '../../lib/response';
 
-export interface ConnectionStatusResponse {
+export interface ConnectionStatusData {
     ip?: string;
-    error?: string;
+}
+
+export interface ConnectionStatusResponse extends ApiResponse {
+    data?: ConnectionStatusData;
 }
 
 const getIpForConfiguredInterface = (): Promise<string> => {
@@ -31,7 +35,7 @@ const getIpForConfiguredInterface = (): Promise<string> => {
 export default async function getConnectionStatus(req: NextApiRequest, res: NextApiResponse<ConnectionStatusResponse>) {
     try {
         const ip = await getIpForConfiguredInterface();
-        return res.status(200).json({ip});
+        return res.status(200).json({data: {ip}});
     } catch (e) {
         return res.status(500).json({error: 'Interface not found'});
     }

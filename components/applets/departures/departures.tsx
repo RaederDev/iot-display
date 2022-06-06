@@ -71,7 +71,7 @@ export default function Departures() {
                         </tbody>
                     </table>
                 ))}
-            </Card>:
+            </Card> :
             <Card theme="black">
                 <div className="text-center text-neongreen font-dseg my-5">
                     ***&nbsp;&nbsp;&nbsp;NO DEPARTURES&nbsp;&nbsp;&nbsp;***

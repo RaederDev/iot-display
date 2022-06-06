@@ -1,8 +1,21 @@
 # Raspberry Pi dashboard
 
+## Requirements
+ - Raspberry Pi or similar board
+ - Screen (1024x600)
+ - Internet connection
+ - Open Weather API key
+
+## Recommended
+ - EP-0106 Sensor Hub Development board
+
 ## Setup server
 
+If you have an EP-0106 Sensor Hub board attached make sure to enable I2C in the raspi-config
+interface options before proceeding.
+
 Make sure you have git, nodejs and systemd installed before starting the setup process.  
+
 Download and execute the setup script. This will create a new user, clone the project,
 build the server and install a systemd startup task to launch the server on boot.
 

@@ -60,12 +60,12 @@ export interface Message {
     serverTime: string;
 }
 
-export interface MonitorResponse {
+export interface MonitorResponse extends ApiResponse {
     data?: Data;
     message?: Message;
 }
 
-export default async function getMonitor(req: NextApiRequest, res: NextApiResponse<ApiResponse<MonitorResponse>>) {
+export default async function getMonitor(req: NextApiRequest, res: NextApiResponse<MonitorResponse>) {
     try {
         const query = (req.query.id as string).split(',')
             .map(id => `stopId=${id}`)
@@ -76,7 +76,7 @@ export default async function getMonitor(req: NextApiRequest, res: NextApiRespon
             console.error(result);
             return res.status(500).json({error: 'internal error'});
         }
-        return res.status(200).json({data: result});
+        return res.status(200).json(result);
     } catch (e) {
         console.error(e);
         return res.status(500).json({error: 'internal error'});

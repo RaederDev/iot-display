@@ -56,7 +56,7 @@ export const getCurrentLocationStops = (monitorData: MonitorResponse): Array<Loc
                 removeAlreadyDeparted(line);
                 if (line.departures.departure.length > 0) {
                     locationStops[locationProps.name].displayLines.push(
-                        lineToDisplayLine(line)
+                        lineToDisplayLine(line),
                     );
                 }
             });

@@ -17,6 +17,6 @@ export default function ConnectionStatus() {
     }, []);
 
     return (
-        <span>IP: {connectionData?.ip}</span>
+        <span>IP: {connectionData?.data?.ip}</span>
     );
 }

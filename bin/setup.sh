@@ -25,8 +25,12 @@ sudo -u display git clone https://github.com/RaederDev/iot-display.git /opt/iot-
 sudo -u display cp /opt/iot-display/config/config.tpl.json /opt/iot-display/config/config.json
 sudo -u display sh -c "cd /opt/iot-display && /opt/iot-display/bin/update-server.sh"
 ln -s /opt/iot-display/bin/system/iot-display.service /lib/systemd/system/iot-display.service
+ln -s /opt/iot-display/bin/system/iot-human-monitoring.service /lib/systemd/system/iot-human-monitoring.service
 
 systemctl daemon-reload
 
 echo Please add valid configuration file to /opt/iot-display/config, afterwards start the server with
 echo "systemctl enable iot-display && systemctl start iot-display"
+
+echo If you have an EP-0106 Sensor Hub Development board you can automatically turn on your screen when a human is detected
+echo "systemctl enable iot-human-monitoring && systemctl start iot-human-monitoring"

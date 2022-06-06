@@ -2,6 +2,7 @@ import type {NextApiRequest, NextApiResponse} from 'next';
 // @ts-ignore
 import {AsyncWeather} from '@cicciosgamino/openweather-apis';
 import {ConfigKey, getConfigValue, OpenWeatherConfig} from '../../lib/config';
+import {ApiResponse} from '../../lib/response';
 
 type WeatherConditionMain = 'Thunderstorm' | 'Drizzle' | 'Rain'
     | 'Snow' | 'Atmosphere' | 'Clear' | 'Clouds';
@@ -27,11 +28,15 @@ interface Main {
     humidity: number;
 }
 
-export interface WeatherResponse {
+export interface WeatherData {
     coord: Coords;
     weather: Array<Weather>;
     name: string;
     main: Main;
+}
+
+export interface WeatherResponse extends ApiResponse {
+    data?: WeatherData;
 }
 
 export default async function getWeather(req: NextApiRequest, res: NextApiResponse<WeatherResponse>) {
@@ -47,13 +52,14 @@ export default async function getWeather(req: NextApiRequest, res: NextApiRespon
     weather.setApiKey(weatherConfig.apiKey);
 
     try {
-        const resp: WeatherResponse = await weather.getAllWeather();
+        const resp: WeatherData = await weather.getAllWeather();
         resp.weather = resp.weather.map(weather => {
             weather.icon = `https://openweathermap.org/img/wn/${weather.icon}@2x.png`;
             return weather;
         });
-        return res.status(200).json(resp);
+        return res.status(200).json({data: resp});
     } catch (e) {
-        return res.status(500);
+        console.error(e);
+        return res.status(500).json({error: 'internal error'});
     }
 }
