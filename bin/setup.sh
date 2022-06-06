@@ -26,7 +26,7 @@ sudo -u display git clone https://github.com/RaederDev/iot-display.git /opt/iot-
 sudo -u display cp /opt/iot-display/config/config.tpl.json /opt/iot-display/config/config.json
 sudo -u display sh -c "cd /opt/iot-display && /opt/iot-display/bin/update-server.sh"
 ln -s /opt/iot-display/bin/system/iot-display.service /lib/systemd/system/iot-display.service
-ln -s /opt/iot-display/bin/system/iot-human-monitoring.service /lib/systemd/system/iot-human-monitoring.service
+ln -s /opt/iot-display/bin/system/iot-human-monitoring@.service /lib/systemd/system/iot-human-monitoring@.service
 
 systemctl daemon-reload
 
