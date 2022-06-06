@@ -1,5 +1,7 @@
 # Raspberry Pi dashboard
 
+<img src="github/screenshot.jpg" height="700px" alt="Dashboard in action"/>
+
 ## Requirements
  - Raspberry Pi or similar board
  - Screen (1024x600)
@@ -34,6 +36,18 @@ Aftwards enable and start the server:
 systemctl enable iot-display && systemctl start iot-display
 ```
 
+## Setup Human monitoring service
+
+If you have an EP-0106 Sensor Hub Development board connected you can automatically turn on your screen when human
+activity is detected in the room.
+
+Replace YOUR_USER_THAT_STARTS_X11 with the user you use to log-into your DE.
+Please note that the user must be in the i2c group to access sensor data.
+```bash
+systemctl enable iot-human-monitoring@YOUR_USER_THAT_STARTS_X11
+systemctl start iot-human-monitoring@YOUR_USER_THAT_STARTS_X11
+```
+
 ## Setup client
 
 The project contains a desktop file and script to launch chromium in kiosk mode.
@@ -44,6 +58,14 @@ You can find the script and setup process in your installation path:
 ```bash
 /opt/iot-display/bin/launch-browser.js
 /opt/iot-display/bin/system/iot-display-kiosk.desktop
+```
+
+## Updating project
+
+If you want to update the project to the newest version execute the update script and restart the service.
+```bash
+sudo -u display /opt/iot-display/bin/update-server.sh
+sudo systemctl restart iot-display
 ```
 
 ## Finding stop and diva IDs

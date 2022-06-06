@@ -33,4 +33,4 @@ echo Please add valid configuration file to /opt/iot-display/config, afterwards 
 echo "systemctl enable iot-display && systemctl start iot-display"
 
 echo If you have an EP-0106 Sensor Hub Development board you can automatically turn on your screen when a human is detected
-echo "systemctl enable iot-human-monitoring@USER_THAT_STARTS_X11 && systemctl start iot-human-monitoring@USER_THAT_STARTS_X11"
+echo "systemctl enable iot-human-monitoring@YOUR_USER_THAT_STARTS_X11 && systemctl start iot-human-monitoring@YOUR_USER_THAT_STARTS_X11"
