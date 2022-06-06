@@ -1,15 +1,16 @@
 [Unit]
 Description=iot-display
 Documentation=https://github.com/RaederDev/iot-display
-After=network.target
+After=graphical.target
 
 [Service]
 Type=simple
-User=display
+User=root
 ExecStart=/opt/iot-display/bin/launch-human-monitoring.sh
 WorkingDirectory=/opt/iot-display/
 Restart=no
 Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/%I/.Xauthority
 
 [Install]
 WantedBy=multi-user.target
