@@ -72,3 +72,8 @@ sudo systemctl restart iot-display
 You can use this tool (not affiliated with the project), to easily find WL stop and diva IDs for your config file:
   
 https://till.mabe.at/rbl/
+
+## Credits
+
+Wiener Linien real time data API:  
+Datenquelle: Stadt Wien - https://data.wien.gv.at
