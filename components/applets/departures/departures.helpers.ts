@@ -14,28 +14,40 @@ export interface DisplayLine {
     time: string;
 }
 
-export const lineToDisplayLine = (line: Line): DisplayLine => {
-    const departureTime = new Date(line.departures.departure[0].departureTime.timeReal);
+export function departureTimeToMinutes(timeReal: string): string {
+    const departureTime = new Date(timeReal);
     let minutes: string | number = differenceInMinutes(departureTime, new Date());
     if (minutes < 1) {
-        minutes = '*';
+        return '*';
     }
 
+    return minutes.toString();
+}
+
+export function lineToDisplayLine(line: Line): DisplayLine {
     return {
         name: line.name,
         destination: line.towards.toUpperCase(),
-        time: minutes.toString(),
+        time: departureTimeToMinutes(line.departures.departure[0].departureTime.timeReal),
     };
-};
+}
 
-export const removeAlreadyDeparted = (line: Line) => {
+export function lineToDisplayLines(line: Line): Array<DisplayLine> {
+    return line.departures.departure.map(departure => ({
+        name: line.name,
+        destination: line.towards.toUpperCase(),
+        time: departureTimeToMinutes(departure.departureTime.timeReal),
+    }));
+}
+
+export function removeAlreadyDeparted(line: Line) {
     const now = Date.now();
     line.departures.departure = line.departures
         .departure
         .filter(departure => (new Date(departure.departureTime.timeReal)).getTime() > now);
-};
+}
 
-export const getCurrentLocationStops = (monitorData: MonitorResponse): Array<LocationStop> => {
+export function getCurrentLocationStops(monitorData: MonitorResponse): Array<LocationStop> {
     const stopsConfig: Array<WlStopConfig> = getConfigValue(ConfigKey.WL_STOPS);
     const locationStops: { [key: string]: LocationStop; } = {};
 
@@ -64,4 +76,37 @@ export const getCurrentLocationStops = (monitorData: MonitorResponse): Array<Loc
 
     return Object.values(locationStops)
         .filter(stop => stop.displayLines.length > 0);
-};
+}
+
+export function getAllLocationStopsForLine(
+    monitorData: MonitorResponse|undefined,
+    locationStop: LocationStop,
+    displayLine: DisplayLine,
+): Array<LocationStop> {
+    const locationStops: Array<LocationStop> = [];
+    monitorData?.data?.monitors
+        .filter(monitor => monitor.locationStop.properties.name === locationStop.name)
+        .forEach(monitor => {
+            const locationProps = monitor.locationStop.properties;
+            const stop: LocationStop = {
+                name: locationProps.name,
+                title: locationProps.title,
+                displayLines: [],
+            };
+
+            monitor.lines
+                .filter(line => displayLine.name === line.name)
+                .forEach(line => {
+                    removeAlreadyDeparted(line);
+                    if (line.departures.departure.length > 0) {
+                        stop.displayLines.push(...lineToDisplayLines(line));
+                    }
+                });
+
+            if (stop.displayLines.length > 0) {
+                locationStops.push(stop);
+            }
+        });
+
+    return locationStops;
+}

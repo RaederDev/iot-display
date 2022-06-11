@@ -1,3 +1,4 @@
+// @ts-ignore
 const i2c = require('i2c-bus');
 const {exec} = require("child_process");
 

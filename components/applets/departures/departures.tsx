@@ -1,23 +1,29 @@
 import {ConfigKey, getConfigValue, WlStopConfig} from '../../../lib/config';
 import Card from '../../card';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {CACHE_KEY, getCachedObject, setCachedObject} from '../../../lib/cache';
 import {MonitorResponse} from '../../../pages/api/wl-realtime-monitor/[id]';
-import {getCurrentLocationStops, LocationStop} from './departures.helpers';
+import {DisplayLine, getAllLocationStopsForLine, getCurrentLocationStops, LocationStop} from './departures.helpers';
+import DepartureTable from './departure-table';
+import {IoArrowBack} from '@react-icons/all-files/io5/IoArrowBack';
+
+interface DetailView {
+    locationStop: LocationStop;
+    line: DisplayLine;
+}
 
 export default function Departures() {
     const [locationStops, setLocationStops] = useState<Array<LocationStop>>([]);
+    const [detailLocationStops, setDetailLocationStops] = useState<Array<LocationStop>>([]);
+    const [detailView, setDetailView] = useState<DetailView>();
+    const stopsConfig = useRef<Array<WlStopConfig>>(getConfigValue(ConfigKey.WL_STOPS));
+    const monitorData = useRef<MonitorResponse>();
 
     useEffect(() => {
-        const stopsConfig: Array<WlStopConfig> = getConfigValue(ConfigKey.WL_STOPS);
-        let monitorData: MonitorResponse | null = null;
-
         const updateDisplayLines = () => {
-            if (!monitorData) {
-                return;
+            if (monitorData.current) {
+                setLocationStops(getCurrentLocationStops(monitorData.current));
             }
-
-            setLocationStops(getCurrentLocationStops(monitorData));
         };
 
         const refreshData = async () => {
@@ -25,17 +31,16 @@ export default function Departures() {
             console.log('cached departures data', cachedResponse);
 
             if (cachedResponse) {
-                monitorData = cachedResponse;
+                monitorData.current = cachedResponse;
                 updateDisplayLines();
                 return;
             }
 
-            const ids = stopsConfig.map(stop => stop.stopId).join(',');
-            const response = await (await fetch(`api/wl-realtime-monitor/${ids}`)).json();
-            setCachedObject(CACHE_KEY.DEPARTURES_RESPONSE, response.data);
-            monitorData = response.data;
+            const ids = stopsConfig.current.map(stop => stop.stopId).join(',');
+            monitorData.current = await (await fetch(`api/wl-realtime-monitor/${ids}`)).json();
+            setCachedObject(CACHE_KEY.DEPARTURES_RESPONSE, monitorData.current);
             updateDisplayLines();
-            console.log('fetched departures', response);
+            console.log('fetched departures', monitorData.current);
         };
 
         refreshData();
@@ -48,34 +53,64 @@ export default function Departures() {
         };
     }, []);
 
-    return (
-        locationStops.length > 0 ?
-            <Card theme="black">
-                {locationStops.map((locationStop, il) => (
-                    <table key={il} className="w-full text-neongreen font-dseg mb-5 last:mb-0">
-                        <thead>
-                        <tr>
-                            <td colSpan={3} className="text-center pb-2">
-                                {locationStop.title.toUpperCase()}
-                            </td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {locationStop.displayLines?.map((line, id) => (
-                            <tr key={id} className="h-8">
-                                <td className="text-left">{line.name}</td>
-                                <td className="text-left w-full px-4">{line.destination}</td>
-                                <td className="text-right">{line.time}</td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
-                ))}
-            </Card> :
-            <Card theme="black">
-                <div className="text-center text-neongreen font-dseg my-5">
-                    ***&nbsp;&nbsp;&nbsp;NO DEPARTURES&nbsp;&nbsp;&nbsp;***
-                </div>
-            </Card>
-    );
+    useEffect(() => {
+        if (!detailView) {
+            return;
+        }
+
+        const refresh = () => {
+            const stops = getAllLocationStopsForLine(
+                monitorData.current,
+                detailView.locationStop,
+                detailView.line,
+            );
+            setDetailLocationStops(stops);
+        };
+        refresh();
+        const detailViewRefreshInterval = setInterval(refresh, 1000 * 5);
+
+        return () => clearInterval(detailViewRefreshInterval);
+    }, [detailView, monitorData]);
+
+    function onDepartureTapped(locationStop: LocationStop, line: DisplayLine) {
+        setDetailView({
+            locationStop,
+            line,
+        });
+    }
+
+    function closeDetailView() {
+        setDetailView(undefined);
+    }
+
+    function renderNoDepartures() {
+        return <div className="text-center text-neongreen font-dseg my-5">
+            ***&nbsp;&nbsp;&nbsp;NO DEPARTURES&nbsp;&nbsp;&nbsp;***
+        </div>;
+    }
+
+    function renderAllDeparturesTable(stops: Array<LocationStop>) {
+        return stops.map((stop: LocationStop, i: number) =>
+            <DepartureTable key={i} onDepartureTapped={onDepartureTapped} locationStop={stop}/>,
+        );
+    }
+
+    function render() {
+        if (locationStops.length < 1) {
+            return renderNoDepartures();
+        }
+
+        if (detailView) {
+            return <>
+                <IoArrowBack onClick={closeDetailView} className="absolute text-neongreen"/>
+                {detailLocationStops.length > 0 ?
+                    renderAllDeparturesTable(detailLocationStops) :
+                    renderNoDepartures()
+                }
+            </>;
+        }
+        return renderAllDeparturesTable(locationStops);
+    }
+
+    return <Card theme="black">{render()}</Card>;
 }

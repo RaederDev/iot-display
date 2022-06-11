@@ -8,7 +8,7 @@ interface Props {
 export default function Card({theme, children}: Props) {
     const themeClass = theme === 'black' ? 'text-white bg-darkgray' : 'bg-white';
     return (
-        <div className={'py-4 px-4 rounded-sm shadow-md ' + themeClass}>
+        <div className={'relative py-4 px-4 rounded-sm shadow-md ' + themeClass}>
             {children}
         </div>
     );
