@@ -1,10 +1,10 @@
 import type {NextPage} from 'next'
 import Layout from '../components/layout';
-import Greeting from '../components/applets/greeting';
-import Weather from '../components/applets/weather';
-import Departures from '../components/applets/departures/departures';
-import BigClock from '../components/applets/big-clock';
-import PiHole from '../components/applets/pi-hole';
+import Greeting from '../components/widgets/greeting';
+import Weather from '../components/widgets/weather';
+import Departures from '../components/widgets/departures/departures';
+import BigClock from '../components/widgets/big-clock';
+import PiHole from '../components/widgets/pi-hole';
 
 const Home: NextPage = () => {
     return (

@@ -1,5 +1,5 @@
-import Clock from './applets/clock';
-import ConnectionStatus from './applets/connection-status';
+import Clock from './widgets/clock';
+import ConnectionStatus from './widgets/connection-status';
 import StatusBarIcons from './status-bar-icons';
 
 export default function StatusBar() {
