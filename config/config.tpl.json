@@ -2,6 +2,27 @@
   "user": "Username",
   "networkInterface": "",
   "piHoleHost": "127.0.0.1",
+  "layout": {
+    "top": {
+      "width": 12,
+      "widgets": [
+        "greeting"
+      ]
+    },
+    "left": {
+      "width": 5,
+      "widgets": [
+        "weather",
+        "pi-hole"
+      ]
+    },
+    "right": {
+      "width": 7,
+      "widgets": [
+        "departures"
+      ]
+    }
+  },
   "openWeather": {
     "apiKey": "",
     "country": "AT",
