@@ -1,0 +1,24 @@
+[package]
+name = "iot-display-rust"
+version = "0.1.0"
+edition = "2021"
+description = "IOT"
+
+[package.metadata.bundle]
+name = "DogSearch"
+identifier = "com.dogs.dogsearch"
+version = "1.0.0"
+copyright = "Copyright (c) Jane Doe 2016. All rights reserved."
+category = "Developer Tool"
+short_description = "Easily search for Dog photos"
+resources = ["public"]
+
+[dependencies]
+anyhow = "1.0.75"
+config = "0.13.3"
+dioxus = "0.4.0"
+dioxus-desktop = "0.4.0"
+dirs = "5.0.1"
+serde = "1.0.171"
+strum = "0.25.0"
+strum_macros = "0.25.3"
