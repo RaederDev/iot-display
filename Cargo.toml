@@ -15,10 +15,13 @@ resources = ["public"]
 
 [dependencies]
 anyhow = "1.0.75"
-config = "0.13.3"
-dioxus = "0.4.0"
-dioxus-desktop = "0.4.0"
+config = "0.14.0"
+dioxus = { version = "0.5.1", features = ["desktop"] }
+dioxus-desktop = "0.5.1"
 dirs = "5.0.1"
+reqwest = { version = "0.12.3", features = ["json"] }
 serde = "1.0.171"
-strum = "0.25.0"
-strum_macros = "0.25.3"
+serde_json = "1.0.108"
+strum = "0.26.2"
+strum_macros = "0.26.2"
+tokio = { version = "1.35", features = ["full"] }

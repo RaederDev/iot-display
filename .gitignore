@@ -1,9 +1,10 @@
 target/
 node_modules/
-public/
+public/tailwind.css
 .yarn
 .history
 .idea
 .pnp.cjs
 .pnp.loader.mjs
 Settings.toml
+dist

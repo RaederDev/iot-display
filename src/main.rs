@@ -3,8 +3,10 @@ use std::sync::OnceLock;
 
 use crate::config::Configuration;
 use crate::dashboard::Dashboard;
-use dioxus_desktop::Config;
+use dioxus::prelude::*;
+use dioxus_desktop::{tao::window::Fullscreen, Config, LogicalSize, WindowBuilder};
 
+mod cache;
 mod config;
 mod dashboard;
 mod widgets;
@@ -16,14 +18,24 @@ fn main() {
     match config {
         Ok(config) => {
             config.validate().unwrap();
-            println!("{:?}", config);
             APP_CONFIG.set(config).unwrap();
-            dioxus_desktop::launch_cfg(
-                Dashboard,
-                Config::new().with_custom_head(
-                    r#"<link rel="stylesheet" href="public/tailwind.css">"#.to_string(),
-                ),
-            );
+            let window_config = &APP_CONFIG.get().unwrap().window;
+            let mut window = WindowBuilder::new()
+                .with_title("IOT Display")
+                .with_inner_size(LogicalSize::new(window_config.width, window_config.height));
+            if window_config.fullscreen {
+                window = window.with_fullscreen(Some(Fullscreen::Borderless(None)));
+            }
+
+            LaunchBuilder::desktop()
+                .with_cfg(
+                    Config::new()
+                        .with_custom_head(
+                            r#"<link rel="stylesheet" href="public/tailwind.css">"#.to_string(),
+                        )
+                        .with_window(window),
+                )
+                .launch(Dashboard);
         }
         Err(e) => eprintln!("{}", e),
     }

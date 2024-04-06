@@ -1,23 +1,21 @@
+use dioxus::core_macro::rsx;
 use dioxus::prelude::*;
-use dioxus::{
-    core::{Element, Scope},
-    core_macro::rsx,
-    hooks::use_state,
-};
 
 use crate::{config::PositionConfig, widgets::widget::WidgetFactory, APP_CONFIG};
 
-pub fn Dashboard(cx: Scope<'_>) -> Element<'_> {
-    let widgets_left = use_state(cx, || {
+const COLUMN: &str = "relative py-4 px-4 rounded-sm shadow-md bg-white mt-5 first:mt-0";
+
+pub fn Dashboard() -> Element {
+    let widgets_left = use_signal(|| {
         WidgetFactory::make_widgets(&APP_CONFIG.get().unwrap().widget, PositionConfig::Left)
     });
-    let widgets_center = use_state(cx, || {
+    let widgets_center = use_signal(|| {
         WidgetFactory::make_widgets(&APP_CONFIG.get().unwrap().widget, PositionConfig::Center)
     });
-    let widgets_right = use_state(cx, || {
+    let widgets_right = use_signal(|| {
         WidgetFactory::make_widgets(&APP_CONFIG.get().unwrap().widget, PositionConfig::Right)
     });
-    let grid_config = use_state(cx, || {
+    let grid_config = use_signal(|| {
         let grid = &APP_CONFIG.get().unwrap().grid;
         (
             format!("col-span-{}", grid.left),
@@ -25,38 +23,40 @@ pub fn Dashboard(cx: Scope<'_>) -> Element<'_> {
             format!("col-span-{}", grid.right),
         )
     });
-    let dom = rsx! {
-            div {
-                class: "p-2 grid grid-cols-12",
-                div {
-                    class: "{grid_config.0}",
-                    for (i, widget) in widgets_left.iter().enumerate() {
-                        div {
-                            key: "{i}",
-                            widget.render(cx)
-                        }
-                    }
-                },
-                div {
-                    class: "{grid_config.1}",
-                    for (i, widget) in widgets_center.iter().enumerate() {
-                        div {
-                            key: "{i}",
-                            widget.render(cx)
-                        }
-                    }
-                },
-                div {
-                    class: "{grid_config.2}",
-                    for (i, widget) in widgets_right.iter().enumerate() {
-                        div {
-                            key: "{i}",
-                            widget.render(cx)
-                        }
-                    }
-                },
-            }
-    };
 
-    cx.render(dom)
+    rsx! {
+        div {
+            class: "p-5 grid grid-cols-12 font-sans bg-lightgray min-h-screen gap-x-5 font-sans",
+            div {
+                class: "{grid_config().0}",
+                for (i, widget) in widgets_left.iter().enumerate() {
+                    div {
+                        class: COLUMN,
+                        key: "{i}",
+                        { widget.render() }
+                    }
+                }
+            },
+            div {
+                class: "{grid_config().1}",
+                for (i, widget) in widgets_center.iter().enumerate() {
+                    div {
+                        class: COLUMN,
+                        key: "{i}",
+                        { widget.render() }
+                    }
+                }
+            },
+            div {
+                class: "{grid_config().2}",
+                for (i, widget) in widgets_right.iter().enumerate() {
+                    div {
+                        class: COLUMN,
+                        key: "{i}",
+                       { widget.render() }
+                    }
+                }
+            },
+        }
+    }
 }

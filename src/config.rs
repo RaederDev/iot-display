@@ -26,6 +26,13 @@ pub struct GridConfig {
 }
 
 #[derive(Deserialize, Debug)]
+pub struct WindowConfig {
+    pub height: u32,
+    pub width: u32,
+    pub fullscreen: bool,
+}
+
+#[derive(Deserialize, Debug)]
 pub struct WidgetConfig {
     pub position: PositionConfig,
     pub widget_type: WidgetType,
@@ -35,6 +42,7 @@ pub struct WidgetConfig {
 #[derive(Deserialize, Debug)]
 pub struct Configuration {
     pub grid: GridConfig,
+    pub window: WindowConfig,
     pub widget: Option<Vec<WidgetConfig>>,
 }
 

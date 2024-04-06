@@ -1,24 +1,25 @@
 use std::collections::HashMap;
 
 use anyhow::Error;
-use dioxus::core::{Element, ScopeState};
+use dioxus::dioxus_core::Element;
 use serde::Deserialize;
 use strum_macros::EnumIter;
 
 use crate::config::{PositionConfig, WidgetConfig};
 
-use super::text_widget::TextWidget;
+use super::{pihole_widget::PiholeWidget, text_widget::TextWidget};
 
 #[derive(Debug, EnumIter, Deserialize)]
 pub enum WidgetType {
     Text,
+    Pihole,
 }
-
 pub struct WidgetFactory;
 impl WidgetFactory {
     pub fn make_widget(config: &WidgetConfig) -> Result<Box<dyn Widget>, Error> {
         match config.widget_type {
             WidgetType::Text => TextWidget::build(&config.config),
+            WidgetType::Pihole => PiholeWidget::build(&config.config),
         }
     }
 
@@ -40,7 +41,7 @@ impl WidgetFactory {
 }
 
 pub trait Widget {
-    fn render<'a>(&self, cx: &'a ScopeState) -> Element<'a>;
+    fn render(&self) -> Element;
     fn build(config: &Option<HashMap<String, String>>) -> Result<Box<dyn Widget>, Error>
     where
         Self: Sized;
