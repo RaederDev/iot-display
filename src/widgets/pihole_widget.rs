@@ -91,11 +91,35 @@ impl Widget for PiholeWidget {
 
         rsx!(
             div {
-                class: "overflow-hidden",
-                if result.read().is_some() {
-                    "Domains being blocked: {result.read().as_ref().unwrap().domains_being_blocked}"
-                } else {
-                    "Loading..."
+                class: "flex justify-center w-full",
+                img {
+                    height: "50",
+                    width: "50",
+                    alt: "Pi-hole",
+                    src: "public/icons/pi-hole.svg",
+                }
+            }
+            table {
+                class: "w-full text-xl mt-7",
+                tbody {
+                    tr {
+                        td { "Ads blocked today" }
+                        td {
+                            {result.read().as_ref().map_or_else(|| "Loading...".to_string(), |r| r.ads_blocked_today.to_string())}
+                        }
+                    }
+                    tr {
+                        td { "DNS queries today" }
+                        td {
+                            {result.read().as_ref().map_or_else(|| "Loading...".to_string(), |r| r.dns_queries_today.to_string())}
+                        }
+                    }
+                    tr {
+                        td { "Blocked domains" }
+                        td {
+                            {result.read().as_ref().map_or_else(|| "Loading...".to_string(), |r| r.domains_being_blocked.to_string())}
+                        }
+                    }
                 }
             }
         )

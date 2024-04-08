@@ -1,7 +1,7 @@
 use dioxus::core_macro::rsx;
 use dioxus::prelude::*;
 
-use crate::{config::PositionConfig, widgets::widget::WidgetFactory, APP_CONFIG};
+use crate::{config::PositionConfig, top_bar::TopBar, widgets::widget::WidgetFactory, APP_CONFIG};
 
 const COLUMN: &str = "relative py-4 px-4 rounded-sm shadow-md bg-white mt-5 first:mt-0";
 
@@ -25,8 +25,9 @@ pub fn Dashboard() -> Element {
     });
 
     rsx! {
+        TopBar {}
         div {
-            class: "p-5 grid grid-cols-12 font-sans bg-lightgray min-h-screen gap-x-5 font-sans",
+            class: "p-5 grid grid-cols-12 bg-lightgray min-h-screen gap-x-5 font-sans",
             div {
                 class: "{grid_config().0}",
                 for (i, widget) in widgets_left.iter().enumerate() {

@@ -33,6 +33,11 @@ pub struct WindowConfig {
 }
 
 #[derive(Deserialize, Debug)]
+pub struct IpConfig {
+    pub interface: String,
+}
+
+#[derive(Deserialize, Debug)]
 pub struct WidgetConfig {
     pub position: PositionConfig,
     pub widget_type: WidgetType,
@@ -43,6 +48,7 @@ pub struct WidgetConfig {
 pub struct Configuration {
     pub grid: GridConfig,
     pub window: WindowConfig,
+    pub ip: IpConfig,
     pub widget: Option<Vec<WidgetConfig>>,
 }
 

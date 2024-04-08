@@ -9,6 +9,7 @@ use dioxus_desktop::{tao::window::Fullscreen, Config, LogicalSize, WindowBuilder
 mod cache;
 mod config;
 mod dashboard;
+mod top_bar;
 mod widgets;
 
 static APP_CONFIG: OnceLock<Configuration> = OnceLock::new();
