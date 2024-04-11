@@ -1,17 +1,23 @@
 use std::{
-    any::Any,
     collections::HashMap,
+    fs,
+    path::PathBuf,
     time::{Duration, SystemTime},
 };
 
+use anyhow::{bail, Error};
+use dirs::cache_dir;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CacheEntry {
-    pub value: Box<dyn Any>,
+    pub value: String,
     pub ttl: Option<Duration>,
     pub created_at: SystemTime,
 }
 
 impl CacheEntry {
-    pub fn new(value: Box<dyn Any>, ttl: Option<Duration>) -> Self {
+    pub fn new(value: String, ttl: Option<Duration>) -> Self {
         Self {
             value,
             ttl,
@@ -30,29 +36,62 @@ impl CacheEntry {
 
 pub struct Cache {
     data: HashMap<String, CacheEntry>,
+    persist: bool,
+    cache_name: String,
 }
 
 impl Cache {
-    pub fn new() -> Self {
+    pub fn new(persist: bool, cache_name: String) -> Self {
         Self {
             data: HashMap::new(),
+            persist,
+            cache_name,
         }
     }
 
-    pub fn get<T: 'static>(&self, key: &str) -> Option<&T> {
+    fn get_cache_path(&self) -> Option<PathBuf> {
+        cache_dir().map(|p| p.join("iot-display").join(&self.cache_name))
+    }
+
+    pub fn load_cache_from_disk(&mut self) -> Result<(), Error> {
+        if let Some(path) = self.get_cache_path() {
+            let data = match fs::read_to_string(path) {
+                Ok(data) => data,
+                Err(_) => String::new(),
+            };
+            self.data = serde_json::from_str(&data)?;
+            return Ok(());
+        }
+        bail!("Could not get cache path")
+    }
+
+    pub fn save_cache_to_disk(&self) -> Result<(), Error> {
+        if let Some(path) = self.get_cache_path() {
+            println!("Saving cache to disk: {:?}", path);
+            let data = serde_json::to_string(&self.data)?;
+            fs::write(path, data)?;
+            return Ok(());
+        }
+        bail!("Could not get cache path")
+    }
+
+    pub fn get(&mut self, key: &str) -> Option<String> {
         if let Some(entry) = self.data.get(key) {
-            if entry.is_expired() {
-                None
+            if !entry.is_expired() {
+                return Some(entry.value.clone());
             } else {
-                entry.value.downcast_ref::<T>()
+                self.remove(key);
             }
-        } else {
-            None
         }
+        None
     }
 
-    pub fn set<T: 'static>(&mut self, key: &str, value: T, ttl: Option<Duration>) {
+    pub fn set(&mut self, key: &str, value: String, ttl: Option<Duration>) {
         self.data
-            .insert(key.to_string(), CacheEntry::new(Box::new(value), ttl));
+            .insert(key.to_string(), CacheEntry::new(value, ttl));
+    }
+
+    pub fn remove(&mut self, key: &str) {
+        self.data.remove(key);
     }
 }

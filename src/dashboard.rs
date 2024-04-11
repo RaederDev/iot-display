@@ -25,39 +25,42 @@ pub fn Dashboard() -> Element {
     });
 
     rsx! {
-        TopBar {}
         div {
-            class: "p-5 grid grid-cols-12 bg-lightgray min-h-screen gap-x-5 font-sans",
+            class: "min-h-screen bg-lightgray",
+            TopBar {}
             div {
-                class: "{grid_config().0}",
-                for (i, widget) in widgets_left.iter().enumerate() {
-                    div {
-                        class: COLUMN,
-                        key: "{i}",
+                class: "p-5 grid grid-cols-12 gap-x-5 font-sans pt-16",
+                div {
+                    class: "{grid_config().0}",
+                    for (i, widget) in widgets_left.iter().enumerate() {
+                        div {
+                            class: COLUMN,
+                            key: "{i}",
+                            { widget.render() }
+                        }
+                    }
+                },
+                div {
+                    class: "{grid_config().1}",
+                    for (i, widget) in widgets_center.iter().enumerate() {
+                        div {
+                            class: COLUMN,
+                            key: "{i}",
+                            { widget.render() }
+                        }
+                    }
+                },
+                div {
+                    class: "{grid_config().2}",
+                    for (i, widget) in widgets_right.iter().enumerate() {
+                        div {
+                            class: COLUMN,
+                            key: "{i}",
                         { widget.render() }
+                        }
                     }
-                }
-            },
-            div {
-                class: "{grid_config().1}",
-                for (i, widget) in widgets_center.iter().enumerate() {
-                    div {
-                        class: COLUMN,
-                        key: "{i}",
-                        { widget.render() }
-                    }
-                }
-            },
-            div {
-                class: "{grid_config().2}",
-                for (i, widget) in widgets_right.iter().enumerate() {
-                    div {
-                        class: COLUMN,
-                        key: "{i}",
-                       { widget.render() }
-                    }
-                }
-            },
+                },
+            }
         }
     }
 }

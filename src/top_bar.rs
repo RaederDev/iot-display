@@ -23,9 +23,6 @@ pub fn TopBar() -> Element {
 
     rsx! {
         div {
-            class: "mb-4"
-        }
-        div {
             class: "z-10 fixed top-0 w-full flex justify-between px-3 py-1 bg-blue text-white",
             div {
                 "{ip}"

@@ -32,7 +32,7 @@ fn main() {
                 .with_cfg(
                     Config::new()
                         .with_custom_head(
-                            r#"<link rel="stylesheet" href="public/tailwind.css">"#.to_string(),
+                            r#"<link rel="stylesheet" href="/public/tailwind.css">"#.to_string(),
                         )
                         .with_window(window),
                 )
