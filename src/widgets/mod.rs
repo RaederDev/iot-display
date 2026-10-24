@@ -1,0 +1,9 @@
+pub(crate) mod backend;
+pub(crate) mod common;
+pub(crate) mod registry;
+pub mod widget_clock;
+pub mod widget_departures;
+pub mod widget_greeting;
+pub mod widget_network;
+pub mod widget_pihole;
+pub mod widget_weather;

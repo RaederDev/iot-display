@@ -1,0 +1,10 @@
+{
+  "message": {"value":"OK","messageCode":1,"serverTime":"2026-10-11T20:00:00.000+0200"},
+  "data": {"monitors":[{
+    "locationStop":{"type":"Feature","geometry":{"type":"Point","coordinates":[16.35,48.18]},"properties":{"name":"60200267","title":"Eichenstraße","municipality":"Wien","municipalityId":49000001,"type":"stop","coordName":"WGS84","attributes":{"rbl":399}}},
+    "lines":[{"name":"18","towards":"Stadion U","direction":"H","richtungsId":"1","barrierFree":true,"realtimeSupported":true,"trafficjam":false,"type":"ptTram","departures":{"departure":[
+      {"departureTime":{"timePlanned":"2026-10-11T20:05:00.000+0200","countdown":5}},
+      {"departureTime":{"timePlanned":"2026-10-11T20:10:00.000+0200","timeReal":"2026-10-11T20:12:00.000+0200","countdown":12},"vehicle":{"name":"18","towards":"Short working","direction":"H","richtungsId":"1","barrierFree":true,"realtimeSupported":true,"trafficjam":false,"type":"ptTram"}}
+    ]}}]
+  }]}
+}
